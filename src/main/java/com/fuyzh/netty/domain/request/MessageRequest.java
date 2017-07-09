@@ -19,7 +19,11 @@ public class MessageRequest implements Serializable {
     private Class<?>[] paramTypes;
     private Object[] params;
 
-    public MessageRequest(String messageId, String serviceName, String methodName, Class<?>[] paramTypes, Object[] params) {
+    public MessageRequest() {
+    }
+
+    public MessageRequest(String messageId, String serviceName, String methodName, Class<?>[] paramTypes, Object[]
+            params) {
         this.messageId = messageId;
         this.serviceName = serviceName;
         this.methodName = methodName;

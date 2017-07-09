@@ -10,7 +10,8 @@ import java.lang.reflect.Proxy;
 public class TestDyncProxy {
     public static void main(String[] args) {
         ProxyHandler ph = new ProxyHandler();
-        TestProxyInf testProxyInf = (TestProxyInf) Proxy.newProxyInstance(TestProxyInf.class.getClassLoader(), new Class<?>[]{TestProxyInf.class}, ph);
+        TestProxyInf testProxyInf = (TestProxyInf) Proxy.newProxyInstance(TestProxyInf.class.getClassLoader(), new
+                Class<?>[]{TestProxyInf.class}, ph);
         System.out.println(testProxyInf.add(1, 2));
     }
 }
