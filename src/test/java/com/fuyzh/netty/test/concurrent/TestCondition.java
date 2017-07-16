@@ -65,7 +65,7 @@ public class TestCondition {
                 //生产肉，耗时1s钟
                 sleep(1000);
                 flag = true;
-                condition.signalAll();
+                condition.signal();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {

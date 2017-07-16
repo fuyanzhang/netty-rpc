@@ -1,4 +1,8 @@
 @startuml
 
+服务发布方 ->zookeeper:服务注册
+服务调用方 ->zookeeper:获取服务
+服务调用方->服务发布方:调用服务
+
 
 @enduml

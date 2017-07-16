@@ -1,6 +1,9 @@
 package com.fuyzh.netty.client.handler;
 
+import com.fuyzh.netty.RPCException;
+import com.fuyzh.netty.domain.MessageConstant;
 import com.fuyzh.netty.domain.request.MessageRequest;
+import com.fuyzh.netty.domain.response.MessageResponse;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -8,12 +11,19 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by zhaoss on 2017/7/2.
  */
 public class RpcClientHandler extends ChannelInboundHandlerAdapter implements InvocationHandler {
     private ChannelHandlerContext ctx;
+    private MessageResponse response = null;
+    private Lock lock = new ReentrantLock();
+    private Condition condition = lock.newCondition();
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -23,7 +33,7 @@ public class RpcClientHandler extends ChannelInboundHandlerAdapter implements In
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         //接受消息
-        super.channelRead(ctx, msg);
+        setResponse((MessageResponse) msg);
     }
 
     @Override
@@ -41,9 +51,32 @@ public class RpcClientHandler extends ChannelInboundHandlerAdapter implements In
         return sendMsg(request);
     }
 
-    public Object sendMsg(MessageRequest request) {
+    //发送消息，等到服务端返回，200s内无返回，抛异常
+    private Object sendMsg(MessageRequest request) throws RPCException {
         ChannelFuture future = ctx.writeAndFlush(request);
         //TODO
-        return null;
+        if (response == null) {
+            lock.lock();
+            try {
+                condition.await(200, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                throw new RPCException("received response timeout！！！", null, MessageConstant.TIMEOUT_ERROR);
+            } finally {
+                lock.unlock();
+            }
+        }
+        return response;
     }
+
+    private void setResponse(MessageResponse response) {
+        try {
+            lock.lock();
+            this.response = response;
+            condition.signal();
+        } finally {
+            lock.unlock();
+        }
+
+    }
+
 }
