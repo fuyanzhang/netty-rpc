@@ -34,8 +34,7 @@ public class BootStrap {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("start to start server...");
         }
-        //加载spring配置文件
-        initSpring();
+
         //启动netty
         initNetty();
 
