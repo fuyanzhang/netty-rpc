@@ -19,7 +19,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * Created by zhaoss on 2017/7/2.
  */
-public class RpcClientHandler extends ChannelInboundHandlerAdapter implements InvocationHandler {
+public class RpcClientHandler extends ChannelInboundHandlerAdapter  {
     private ChannelHandlerContext ctx;
     private MessageResponse response = null;
     private Lock lock = new ReentrantLock();
@@ -41,18 +41,18 @@ public class RpcClientHandler extends ChannelInboundHandlerAdapter implements In
         super.exceptionCaught(ctx, cause);
     }
 
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        MessageRequest request = new MessageRequest();
-        request.setMessageId(UUID.randomUUID().toString());
-        request.setMethodName(method.getName());
-        request.setServiceName(method.getDeclaringClass().getName());
-        request.setParamTypes(method.getParameterTypes());
-        request.setParams(args);
-        return sendMsg(request);
-    }
+//    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+//        MessageRequest request = new MessageRequest();
+//        request.setMessageId(UUID.randomUUID().toString());
+//        request.setMethodName(method.getName());
+//        request.setServiceName(method.getDeclaringClass().getName());
+//        request.setParamTypes(method.getParameterTypes());
+//        request.setParams(args);
+//        return sendMsg(request);
+//    }
 
     //发送消息，等到服务端返回，200s内无返回，抛异常
-    private Object sendMsg(MessageRequest request) throws RPCException {
+    public Object sendMsg(MessageRequest request) throws RPCException {
         ChannelFuture future = ctx.writeAndFlush(request);
         //TODO
         if (response == null) {
