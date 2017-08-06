@@ -37,6 +37,7 @@ public class ServiceRegist implements ApplicationContextAware {
      * */
     public static Object getService(String serviceName) {
 //        return serviceCache.get(serviceName);
+        System.out.println(applicationContext == null);
         return applicationContext.getBean(serviceName);
     }
 

@@ -6,6 +6,7 @@ import com.fuyzh.netty.domain.response.MessageResponse;
 import com.fuyzh.netty.server.rpc.domain.MessageErrorCode;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.apache.commons.beanutils.MethodUtils;
@@ -14,11 +15,13 @@ import org.apache.log4j.Logger;
 /**
  * Created by zhaoss on 2017/7/14.
  */
+@ChannelHandler.Sharable
 public class RpcServerHandler extends ChannelInboundHandlerAdapter {
     private static final Logger LOGGER = Logger.getLogger(RpcServerHandler.class);
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+
 
         MessageRequest messageInfo = (MessageRequest) msg;
         if (LOGGER.isDebugEnabled()) {

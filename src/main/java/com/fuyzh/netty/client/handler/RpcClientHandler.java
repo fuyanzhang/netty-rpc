@@ -53,26 +53,27 @@ public class RpcClientHandler extends ChannelInboundHandlerAdapter  {
 
     //发送消息，等到服务端返回，200s内无返回，抛异常
     public Object sendMsg(MessageRequest request) throws RPCException {
+
         ChannelFuture future = ctx.writeAndFlush(request);
         //TODO
         if (response == null) {
             lock.lock();
             try {
-                condition.await(200, TimeUnit.SECONDS);
+                condition.await(10, TimeUnit.SECONDS);
             } catch (InterruptedException e) {
                 throw new RPCException("received response timeout！！！", null, MessageConstant.TIMEOUT_ERROR);
             } finally {
                 lock.unlock();
             }
         }
-        return response;
+        return response.getResult();
     }
 
     private void setResponse(MessageResponse response) {
         try {
             lock.lock();
             this.response = response;
-            condition.signal();
+            condition.signalAll();
         } finally {
             lock.unlock();
         }

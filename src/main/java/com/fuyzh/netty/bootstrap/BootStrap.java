@@ -19,6 +19,8 @@ import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.net.InetSocketAddress;
+
 /**
  * 引导器
  */
@@ -55,7 +57,7 @@ public class BootStrap {
         EventLoopGroup group = new NioEventLoopGroup();
         ServerBootstrap b = new ServerBootstrap();
         try {
-            b.group(group).channel(NioServerSocketChannel.class).localAddress(servicePort).childHandler(new ChannelInitializer<SocketChannel>() {
+            b.group(group).channel(NioServerSocketChannel.class).localAddress(new InetSocketAddress(serviceIp,servicePort)).childHandler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 protected void initChannel(SocketChannel socketChannel) throws Exception {
                     socketChannel.pipeline().addLast(new ObjectDecoder(Integer.MAX_VALUE, ClassResolvers.cacheDisabled(null))).addLast(new ObjectEncoder()).addLast(hander);

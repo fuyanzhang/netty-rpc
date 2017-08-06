@@ -2,7 +2,6 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-    <bean id="springContext" class="com.fuyzh.netty.core.service.ServiceRegist" />
     <bean class="com.fuyzh.netty.core.utils.PropertiesLoader">
         <property name="locations">
             <list>
@@ -10,9 +9,4 @@
             </list>
         </property>
     </bean>
-    <bean id="startup" class="com.fuyzh.netty.bootstrap.BootStrap" init-method="init">
-        <property name="serviceIp" value="${ServiceIp}"/>
-        <property name="servicePort" value="${ServicePort}"/>
-    </bean>
-
 </beans>
