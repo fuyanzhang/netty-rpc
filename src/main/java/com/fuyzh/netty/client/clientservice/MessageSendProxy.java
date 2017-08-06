@@ -5,7 +5,6 @@ import com.fuyzh.netty.core.utils.PropertiesLoader;
 import com.fuyzh.netty.domain.request.MessageRequest;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -18,9 +17,7 @@ import io.netty.handler.codec.serialization.ObjectEncoder;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
-import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Handler;
 
 /**
  * Created by zhaoss on 2017/8/6.
